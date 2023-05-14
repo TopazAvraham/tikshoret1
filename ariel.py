@@ -1,4 +1,4 @@
-from Cryptodome.Cipher import DES
+adfrom Cryptodome.Cipher import DES
 from Cryptodome.Util.Padding import pad, unpad
 
 
@@ -22,7 +22,7 @@ def decrypt(ciphertext, key, iv):
     return plaintext
 
 
-text = b"Hi my name is poa"
+text = b"Hi my name gg"
 key = b"poaisfun"
 iv = bytes([0] * 8)
 
@@ -40,7 +40,7 @@ plaintext = unpad(cipher.decrypt(ciphertext), 8)
 
 
 # do the same for the next block
-def attack_per_block(ciphertext, blockToDecrypt, isLastBlock, blockNumber):
+def attack_per_block(ciphertext, blockToDecrypt, isLastBlock):
     c = bytes([0] * 8) + blockToDecrypt
     realText = [0, 0, 0, 0, 0, 0, 0, 0]
     for i in range(8):
@@ -53,14 +53,15 @@ def attack_per_block(ciphertext, blockToDecrypt, isLastBlock, blockNumber):
 
         # i+1 is the byte we forcing to be (P'j[x] ^ c[7-i]) is the byte after decryption but not yet xored with the previous block byte
         # than we xor it with the previous block byte to get the real value of the byte in the plaintext
-        last = xor(i + 1, ciphertext[(7 - i) * blockNumber], c[7 - i])
+        #
+        last = xor(i + 1, ciphertext[(7 - i)], c[7 - i])
         realText[7 - i] = last
 
         for k in range(i + 1):
             # var is the updated value in the test block
             # we need to update all the Xk[x] bytes in the test block
             # than we getting the values for the next iteration
-            var = xor(i + 2, ciphertext[(7 - k) * blockNumber], int(realText[7 - k].hex(), 16))
+            var = xor(i + 2, ciphertext[(7 - k)], int(realText[7 - k].hex(), 16))
             c = c[:7 - k] + var + c[8 - k:]
 
     result = ''
@@ -68,14 +69,14 @@ def attack_per_block(ciphertext, blockToDecrypt, isLastBlock, blockNumber):
         result += item.hex()
 
     if isLastBlock:
-        print(unpad(bytes.fromhex(result), 8).decode())
+        return unpad(bytes.fromhex(result), 8).decode()
     else:
         byte_data = bytes.fromhex(result)
         return byte_data.decode()
 
 
 # decrypt the first block
-def attack_first_block(cypertext, blockToDecrypt):
+def attack_first_block(blockToDecrypt):
     c = bytes([0] * 8) + blockToDecrypt
     realText = [0, 0, 0, 0, 0, 0, 0, 0]
     for i in range(8):
@@ -89,14 +90,14 @@ def attack_first_block(cypertext, blockToDecrypt):
         # i+1 is the byte we forcing to be (P'j[x] ^ c[7-i]) is the byte after decryption but not yet xored with
         # the previous block byte
         # than we xor it with the previous block byte to get the real value of the byte in the plaintext
-        last = xor(i + 1, iv[7-i], c[7 - i])
+        last = xor(i + 1, iv[7 - i], c[7 - i])
         realText[7 - i] = last
 
         for k in range(i + 1):
             # var is the updated value in the test block
             # we need to update all the Xk[x] bytes in the test block
             # than we getting the values for the next iteration
-            var = xor(i + 2, iv[7-i], int(realText[7 - k].hex(), 16))
+            var = xor(i + 2, iv[7 - i], int(realText[7 - k].hex(), 16))
             c = c[:7 - k] + var + c[8 - k:]
 
     result = ''
@@ -107,9 +108,12 @@ def attack_first_block(cypertext, blockToDecrypt):
     return byte_data.decode()
 
 
+dycryptedText = ''
 # itertate over all the blocks
 for i in range(0, len(ciphertext), 8):
     if i == 0:
-        print(attack_first_block(ciphertext, ciphertext[:8]))
+        dycryptedText += attack_first_block(ciphertext[:8])
     else:
-        print(attack_per_block(ciphertext, ciphertext[i:i + 8], i == len(ciphertext) - 8, i // 8))
+        dycryptedText += attack_per_block(ciphertext[i - 8:i], ciphertext[i:i + 8], i == len(ciphertext) - 8)
+
+print(dycryptedText)
