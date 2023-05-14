@@ -89,14 +89,14 @@ def attack_first_block(cypertext, blockToDecrypt):
         # i+1 is the byte we forcing to be (P'j[x] ^ c[7-i]) is the byte after decryption but not yet xored with
         # the previous block byte
         # than we xor it with the previous block byte to get the real value of the byte in the plaintext
-        last = xor(i + 1, 0, c[7 - i])
+        last = xor(i + 1, iv[7-i], c[7 - i])
         realText[7 - i] = last
 
         for k in range(i + 1):
             # var is the updated value in the test block
             # we need to update all the Xk[x] bytes in the test block
             # than we getting the values for the next iteration
-            var = xor(i + 2, 0, int(realText[7 - k].hex(), 16))
+            var = xor(i + 2, iv[7-i], int(realText[7 - k].hex(), 16))
             c = c[:7 - k] + var + c[8 - k:]
 
     result = ''
