@@ -51,6 +51,7 @@ plaintext= unpad(cipher.decrypt(ciphertext), 8)
 #step 7 
 # take the second block of the ciphertext
 c = bytes([0] * 8) + ciphertext[8:16]
+
 realText = [0,0,0,0,0,0,0,0]
 for i in range(8):
     while True:
@@ -68,6 +69,7 @@ for i in range(8):
         var = xor(i+2,ciphertext[7-k] ,int(realText[7-k].hex(),16))
         c = c[:7-k] + var + c[8-k:]
 
+
 result = ''
 for item in realText:
     result += item.hex()
@@ -76,6 +78,7 @@ print(unpad(bytes.fromhex(result), 8).decode())
         
     
     
+# do the same for the rest of the blocks
 
 
 
