@@ -23,22 +23,22 @@ def decrypt(ciphertext, key, iv):
 
 
 def attack_per_block(previousBlock, blockToDecrypt):
-    c = bytes([0] * 8) + blockToDecrypt
+    Xj_Ci = bytes([0] * 8) + blockToDecrypt
     realText = [0, 0, 0, 0, 0, 0, 0, 0]
     for i in range(8):
         while True:
             for j in range(256):
-                if oracle(c, key, iv):
+                if oracle(Xj_Ci, key, iv):
                     break
-                c = c[:7 - i] + bytes([c[7 - i] + 1]) + c[8 - i:]
+                Xj_Ci = Xj_Ci[:7 - i] + bytes([Xj_Ci[7 - i] + 1]) + Xj_Ci[8 - i:]
             break
 
-        last = xor(i + 1, previousBlock[(7 - i)], c[7 - i])
+        last = xor(i + 1, previousBlock[(7 - i)], Xj_Ci[7 - i])
         realText[7 - i] = last
 
         for k in range(i + 1):
             var = xor(i + 2, previousBlock[(7 - k)], int(realText[7 - k].hex(), 16))
-            c = c[:7 - k] + var + c[8 - k:]
+            Xj_Ci = Xj_Ci[:7 - k] + var + Xj_Ci[8 - k:]
 
     result = ''
     for item in realText:
