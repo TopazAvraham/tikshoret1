@@ -1,10 +1,13 @@
 from Cryptodome.Cipher import DES
 from Cryptodome.Util.Padding import pad, unpad
-import sys
+
+
 
 def xor(a, b, c):
     return bytes([a ^ b ^ c])
 
+
+# step6
 def oracle(ciphertext, key, iv):
     try:
         cipher = DES.new(key, DES.MODE_CBC, iv)
@@ -13,11 +16,24 @@ def oracle(ciphertext, key, iv):
     except ValueError:
         return False
 
+
 def decrypt(ciphertext, key, iv):
     cipher = DES.new(key, DES.MODE_CBC, iv)
     plaintext = unpad(cipher.decrypt(ciphertext), 8)
     return plaintext
 
+
+text = b"Hadbdymyfunystrgsegtdyjuryjshrsbtrt"
+
+key = b"poaisfun"
+iv = bytes([0] * 8)
+
+# step 3
+cipher = DES.new(key, DES.MODE_CBC, iv)
+ciphertext = cipher.encrypt(pad(text, 8))
+print(ciphertext.hex())
+
+# do the same for the next block
 def attack_per_block(previousBlock, blockToDecrypt, isLastBlock):
     c = bytes([0] * 8) + blockToDecrypt
     realText = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -41,11 +57,6 @@ def attack_per_block(previousBlock, blockToDecrypt, isLastBlock):
         result += item.hex()
 
     return result
-
-
-ciphertext = bytes.fromhex(sys.argv[1])
-key = bytes.fromhex(sys.argv[2])
-iv = bytes.fromhex(sys.argv[3])
 
 dycryptedText = ''
 # itertate over all the blocks
