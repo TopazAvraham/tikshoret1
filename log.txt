@@ -3,9 +3,6 @@ key = b"poaisfun" which is 706f61697366756e
 iv = bytes([0] * 8) which is 0000000000000000
 cipher = 6a43095dee1a971cfc341eadf80b268c
 
-
-
-
 text = b"elbaz block 1"
 key = b"mydeskey"
 iv = bytes([0] * 8)
