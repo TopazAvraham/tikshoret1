@@ -20,7 +20,7 @@ def decrypt(ciphertext,key ,iv):
 text = b"Hello World"
 key = b"poaisfun"
 iv = bytes([0] * 8)
-
+print(key.hex())
 #step 2
 # print(pad(text, 8))
 
