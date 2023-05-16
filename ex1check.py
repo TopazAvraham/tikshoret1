@@ -1,11 +1,8 @@
 from Cryptodome.Cipher import DES
 from Cryptodome.Util.Padding import pad, unpad
 
-
-
 def xor(a, b, c):
     return bytes([a ^ b ^ c])
-
 
 # step6
 def oracle(ciphertext, key, iv):
@@ -30,9 +27,7 @@ iv = bytes([0] * 8)
 # step 3
 cipher = DES.new(key, DES.MODE_CBC, iv)
 ciphertext = cipher.encrypt(pad(text, 8))
-print("ciphertext in hex is: ",ciphertext.hex())
-print("key in hex is: ",key.hex())
-print("iv in hex is: ",iv.hex())
+
 # do the same for the next block
 def attack_per_block(previousBlock, blockToDecrypt, isLastBlock):
     c = bytes([0] * 8) + blockToDecrypt
