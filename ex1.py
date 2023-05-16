@@ -2,11 +2,11 @@ from Cryptodome.Cipher import DES
 from Cryptodome.Util.Padding import pad, unpad
 import sys
 
-
+# xor function - return the xor of the 3 bytes
 def xor(a, b, c):
     return bytes([a ^ b ^ c])
 
-
+# oracle function - return true if the padding is correct
 def oracle(ciphertext, key, iv):
     try:
         cipher = DES.new(key, DES.MODE_CBC, iv)
@@ -15,13 +15,13 @@ def oracle(ciphertext, key, iv):
     except ValueError:
         return False
 
-
+# decrypt function - return the plaintext after decrypting
 def decrypt(ciphertext, key, iv):
     cipher = DES.new(key, DES.MODE_CBC, iv)
     plaintext = unpad(cipher.decrypt(ciphertext), 8)
     return plaintext
 
-
+# attack_per_block function - return the decrypted block in hex
 def attack_per_block(previousBlock, blockToDecrypt):
     Xj_Ci = bytes([0] * 8) + blockToDecrypt
     realText = [0, 0, 0, 0, 0, 0, 0, 0]
@@ -46,18 +46,23 @@ def attack_per_block(previousBlock, blockToDecrypt):
 
     return result
 
+# main function :
+if __name__ == '__main__':
+    # check if the user entered 3 arguments
+    if len(sys.argv) != 4:
+        print("please enter this args: python3 ex1.py <ciphertext> <key> <iv> ")
+        exit(1)
+    ciphertext = bytes.fromhex(sys.argv[1])
+    key = bytes.fromhex(sys.argv[2])
+    iv = bytes.fromhex(sys.argv[3])
 
-ciphertext = bytes.fromhex(sys.argv[1])
-key = bytes.fromhex(sys.argv[2])
-iv = bytes.fromhex(sys.argv[3])
-
-dycryptedText = ''
-# itertate over all the blocks
-for i in range(0, len(ciphertext), 8):
-    if i == 0:
-        dycryptedText += attack_per_block(iv, ciphertext[:8])
-    else:
-        dycryptedText += attack_per_block(ciphertext[i - 8:i], ciphertext[i:i + 8])
-
-print(unpad(bytes.fromhex(dycryptedText), 8).decode())
-
+    decryptedText = ''
+    # iterate over all the blocks
+    for i in range(0, len(ciphertext), 8):
+        if i == 0:
+            decryptedText += attack_per_block(iv, ciphertext[:8])
+        else:
+            decryptedText += attack_per_block(ciphertext[i - 8:i], ciphertext[i:i + 8])
+    # print the plaintext
+    print(unpad(bytes.fromhex(decryptedText), 8).decode())
+        
