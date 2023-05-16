@@ -29,16 +29,10 @@ def attack_per_block(blockBefore, blockToDecrypt, isLastBlock):
                 Xj_Ci = Xj_Ci[:7 - i] + bytes([Xj_Ci[7 - i] + 1]) + Xj_Ci[8 - i:]
             break
 
-        # i+1 is the byte we forcing to be (P'j[x] ^ c[7-i]) is the byte after decryption but not yet xored with the previous block byte
-        # than we xor it with the previous block byte to get the real value of the byte in the plaintext
-        #
         last = xor(i + 1, blockBefore[(7 - i)], Xj_Ci[7 - i])
         realText[7 - i] = last
 
         for k in range(i + 1):
-            # var is the updated value in the test block
-            # we need to update all the Xk[x] bytes in the test block
-            # than we getting the values for the next iteration
             var = xor(i + 2, blockBefore[(7 - k)], int(realText[7 - k].hex(), 16))
             Xj_Ci = Xj_Ci[:7 - k] + var + Xj_Ci[8 - k:]
 
@@ -52,8 +46,6 @@ def attack_per_block(blockBefore, blockToDecrypt, isLastBlock):
         byte_data = bytes.fromhex(result)
         return byte_data.decode()
 
-
-# decrypt the first block
 def attack_first_block(blockToDecrypt, isLastBlock):
     c = bytes([0] * 8) + blockToDecrypt
     realText = [0, 0, 0, 0, 0, 0, 0, 0]
