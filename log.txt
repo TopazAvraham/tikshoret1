@@ -2,8 +2,28 @@ text = b"helloworld"
 key = b"poaisfun" which is 706f61697366756e
 iv = bytes([0] * 8) which is 0000000000000000
 cipher = 6a43095dee1a971cfc341eadf80b268c
+works
 
-text = b"elbaz block 1"
-key = b"mydeskey"
-iv = bytes([0] * 8)
-dda7a9292240ba4d2f6c9b58118e9ffd
+text = b"Hi"
+key=b"mydeskey" which is 6d796465736b6579
+iv=bytes([1]*8) which is 0101010101010101
+ciphertext is 43eb8796da2318da
+works
+
+text= b"elbaz is the most gay person i know"
+key=b"elbazkey" which is  656c62617a6b6579
+iv = bytes([0] * 8) which is 0000000000000000
+cipher is 055dafcdd8f1845fd14d162ee68461a241bfb2530226fc46a38f7150a1f056ba42eb5f55531136e2
+works
+
+text= b"topaz is the king123456789"
+key=b"topazkin" 746f70617a6b696e
+iv bytes([0,1,2,3,4,5,4,5)] 0001020304050405
+cipher is 52dd437521b610cee0b39184994e87f1d49e5942a63be959bd3c8f21b0c0261e
+works
+
+text=b"H"
+key=b"poaisfun" 706f61697366756e
+iv = bytes([0] * 8) which is 0000000000000000
+cipher is 44e1d794f13d08db
+not working
