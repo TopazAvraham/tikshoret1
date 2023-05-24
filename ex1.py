@@ -53,7 +53,7 @@ if __name__ == '__main__':
         print("please enter this args: python3 ex1.py <ciphertext> <key> <iv> ")
         exit(1)
     ciphertext = bytes.fromhex(sys.argv[1])
-    key = bytes.fromhex(sys.argv[2])
+    key = bytes(sys.argv[2].encode())
     iv = bytes.fromhex(sys.argv[3])
 
     decryptedText = ''
