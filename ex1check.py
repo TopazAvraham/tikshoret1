@@ -20,14 +20,17 @@ def decrypt(ciphertext, key, iv):
     return plaintext
 
 
-text = b"Hello World"
-key = b"mydeskey"
-iv = bytes([0] * 8)
+text = b"H"
+key = b"poaisfun"
+
+iv =bytes([0]*8)
 
 # step 3
 cipher = DES.new(key, DES.MODE_CBC, iv)
 ciphertext = cipher.encrypt(pad(text, 8))
-
+print("cipher is "+ ciphertext.hex())
+print ("key is "+ key.hex())
+print("iv is "+ iv.hex())
 # do the same for the next block
 def attack_per_block(previousBlock, blockToDecrypt, isLastBlock):
     c = bytes([0] * 8) + blockToDecrypt
