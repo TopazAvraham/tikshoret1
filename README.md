@@ -2,8 +2,6 @@
 
 ![image](https://github.com/ArielElb/Padding-Oracle-Attack/assets/94087682/e54bef89-957f-4a01-b455-cc5d0782c95d)
 
-# Padding Oracle Attack
-
 This repository contains a Python implementation of a padding oracle attack on a block cipher using the DES encryption algorithm. The attack aims to decrypt a given ciphertext by exploiting a vulnerability in the padding scheme used.
 
 ## Prerequisites
